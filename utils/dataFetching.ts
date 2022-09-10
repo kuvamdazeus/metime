@@ -24,7 +24,7 @@ export const fetchRecommendedIds = async (user: IUser) => {
   const topTracks = await spotify.getMyTopTracks({ limit: 50 });
 
   const ids = topTracks.items.map((track) => track.id).join(",");
-  const axiosRes = await axios.get(`/api/generate_tracks?ids=${ids}&user_id=${user.user_id}`);
+  const axiosRes = await axios.get(`/api/generate_tracks?ids=${ids}`);
   console.log(axiosRes.data);
 
   return axiosRes.data as IUser;
