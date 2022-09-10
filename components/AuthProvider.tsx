@@ -26,10 +26,10 @@ export default function AuthProvider({ children }: { children: JSX.Element }) {
       autoLogin()
         .then(async (data) => {
           console.log("user metadata", data.metadata);
-          setUser(data);
 
           console.log("FETCHING RECOMS");
           const userData = await fetchRecommendedIds(data);
+          console.log(userData);
           console.log("RECOMS", userData.tracks);
           setUser(userData);
         })

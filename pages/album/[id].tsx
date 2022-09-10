@@ -30,7 +30,9 @@ export default function AlbumPage({ album }: Props) {
               </div>
               <div>
                 {console.log(album.artists)}
-                <p className="text-xs font-light tracking-[0.1rem] text-gray-100 mx-10">{album.type.toUpperCase()}</p>
+                <p className="text-xs font-light tracking-[0.1rem] text-gray-100 mx-10">
+                  {album.type.toUpperCase()}
+                </p>
                 <p className="text-[44px] tracking-[0.05rem] text-white font-extrabold mx-10">{album.name}</p>
                 <p className="text-xs font-bold tracking-[0.1rem] text-gray-100 mx-10">
                   <span>{album.artists.join(", ")}</span>

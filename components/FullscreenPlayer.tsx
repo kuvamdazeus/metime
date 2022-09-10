@@ -26,11 +26,14 @@ export default function FullscreenPlayer({ playerRef }: { playerRef: MutableRefO
     console.log("PLAYER STATE CHANGE (useEffect)", playerData);
 
     const updateDurationBar = () => {
-      const fractionDone = playerRef.current ? playerRef.current.getCurrentTime() / playerRef.current.getDuration() : 0;
+      const fractionDone = playerRef.current
+        ? playerRef.current.getCurrentTime() / playerRef.current.getDuration()
+        : 0;
       setDurationPercent(`${Math.round(fractionDone * 100)}%`);
     };
 
-    if (playerData?.playing && !durationBarInterval) setDurationBarInterval(setInterval(updateDurationBar, 1000));
+    if (playerData?.playing && !durationBarInterval)
+      setDurationBarInterval(setInterval(updateDurationBar, 1000));
     else if (!playerData?.playing) {
       clearInterval(durationBarInterval as NodeJS.Timeout);
       setDurationBarInterval(null);
@@ -44,12 +47,33 @@ export default function FullscreenPlayer({ playerRef }: { playerRef: MutableRefO
         src={playerData?.current_song.image_url}
       />
 
-      <div className="absolute z-22 w-full lg:w-1/3 bg-[rgba(255,255,255,0.1)] h-fit">
+      {playerData && playerData.previous_tracks.length > 0 && (
+        <div className="flex items-center p-3 bg-[rgba(255,255,255,0.1)] mr-10">
+          <img
+            src={playerData?.previous_tracks.at(-1)?.image_url}
+            className="object-contain w-12 h-12 mr-3"
+          />
+
+          <div className="w-72">
+            <p className="font-bold text-white">{playerData?.previous_tracks.at(-1)?.name}</p>
+            <p className="text-xs text-gray-200 font-light">
+              {playerData?.previous_tracks.at(-1)?.artists.join(", ")}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className="z-22 w-full lg:w-1/3 bg-[rgba(255,255,255,0.1)]">
         <div className="relative p-5">
-          <img className="object-contain w-max mb-7 shadow-lg rounded" src={playerData?.current_song.image_url} />
+          <img
+            className="object-contain w-max mb-7 shadow-lg rounded"
+            src={playerData?.current_song.image_url}
+          />
 
           <p className="text-2xl text-white font-bold">{playerData?.current_song.name}</p>
-          <p className="text-sm font-thin text-gray-300 mb-10">{playerData?.current_song.artists.join(", ")}</p>
+          <p className="text-sm font-thin text-gray-300 mb-10">
+            {playerData?.current_song.artists.join(", ")}
+          </p>
 
           <div className="flex justify-center items-center text-white">
             <MdSkipPrevious
@@ -57,11 +81,15 @@ export default function FullscreenPlayer({ playerRef }: { playerRef: MutableRefO
               className="mx-1 text-[30px] cursor-pointer opacity-75 hover:opacity-100"
             />
             <MdReplay30
-              onClick={() => playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() - 30)}
+              onClick={() =>
+                playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() - 30)
+              }
               className="mx-1 text-[30px] cursor-pointer opacity-75 hover:opacity-100"
             />
             <MdReplay10
-              onClick={() => playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() - 10)}
+              onClick={() =>
+                playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() - 10)
+              }
               className="mx-1 text-[30px] cursor-pointer opacity-75 hover:opacity-100"
             />
 
@@ -78,11 +106,15 @@ export default function FullscreenPlayer({ playerRef }: { playerRef: MutableRefO
             )}
 
             <MdForward10
-              onClick={() => playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() + 10)}
+              onClick={() =>
+                playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() + 10)
+              }
               className="mx-1 text-[30px] cursor-pointer opacity-75 hover:opacity-100"
             />
             <MdForward30
-              onClick={() => playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() + 30)}
+              onClick={() =>
+                playerRef.current?.seekTo((playerRef.current as ReactPlayer).getCurrentTime() + 30)
+              }
               className="mx-1 text-[30px] cursor-pointer opacity-75 hover:opacity-100"
             />
             <MdSkipNext
@@ -96,6 +128,17 @@ export default function FullscreenPlayer({ playerRef }: { playerRef: MutableRefO
           </section>
         </div>
       </div>
+
+      {playerData && playerData.queue.length > 0 && (
+        <div className="flex items-center p-3 bg-[rgba(255,255,255,0.1)] ml-10">
+          <img src={playerData?.queue.at(0)?.image_url} className="object-contain w-12 h-12 mr-3" />
+
+          <div className="w-72">
+            <p className="font-bold text-white">{playerData?.queue.at(0)?.name}</p>
+            <p className="text-xs text-gray-200 font-light">{playerData?.queue.at(0)?.artists.join(", ")}</p>
+          </div>
+        </div>
+      )}
 
       <div onClick={() => setPlayerFullscreen(false)} className="absolute bottom-8 right-0">
         <BiExitFullscreen

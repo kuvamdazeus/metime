@@ -202,54 +202,49 @@ export default function Player() {
       </section>
     );
 
-  if (!queueIsOpened)
-    return (
-      <>
-        <section className="relative">
-          {CurrentPlayer}
+  return (
+    <>
+      <section className="relative">
+        {CurrentPlayer}
 
-          {showPlaylistsPrompt && (
-            <section className="fixed bottom-32 right-5 bg-black text-white w-72 z-50">
-              {playlists.map((playlist) => (
-                <div
-                  onClick={async () => {
-                    if (playerData && playerData?.current_song) {
-                      try {
-                        await spotify.addTracksToPlaylist(playlist.id, [`spotify:track:${playerData.current_song.id}`]);
-                        toggleToast({ message: `Added track to ${playlist.name}`, type: "message" });
-                      } catch (err) {
-                        toggleToast({ message: "Error adding track to playlist!", type: "error" });
-                      }
+        {showPlaylistsPrompt && (
+          <section className="fixed bottom-32 right-5 bg-black text-white w-72 z-50">
+            {playlists.map((playlist) => (
+              <div
+                onClick={async () => {
+                  if (playerData && playerData?.current_song) {
+                    try {
+                      await spotify.addTracksToPlaylist(playlist.id, [`spotify:track:${playerData.current_song.id}`]);
+                      toggleToast({ message: `Added track to ${playlist.name}`, type: "message" });
+                    } catch (err) {
+                      toggleToast({ message: "Error adding track to playlist!", type: "error" });
                     }
-                  }}
-                  className="p-3 flex items-center cursor-pointer hover:bg-[#1b1b1b]"
-                >
-                  <img className="font-thin rounded object-contain h-8 mr-3" src={playlist.images.low} />
-                  <p className="text-xs">{playlist.name}</p>
-                </div>
-              ))}
-            </section>
-          )}
+                  }
+                }}
+                className="p-3 flex items-center cursor-pointer hover:bg-[#1b1b1b]"
+              >
+                <img className="font-thin rounded object-contain h-8 mr-3" src={playlist.images.low} />
+                <p className="text-xs">{playlist.name}</p>
+              </div>
+            ))}
+          </section>
+        )}
 
-          <ReactPlayer
-            onStart={() => playerRef.current?.seekTo(0)}
-            ref={playerRef}
-            controls
-            onEnded={() => playerData && playNextTrackInQueue({ playerData, setPlayerData })}
-            className="hidden"
-            onPlay={() => playerData && !playerData.playing && setPlayerData({ ...playerData, playing: true })}
-            onPause={() => playerData && playerData.playing && setPlayerData({ ...playerData, playing: false })}
-            volume={0.5}
-            url={playerData?.url}
-            playing={playerData?.playing}
-          />
-        </section>
-      </>
-    );
-  else
-    return (
-      <>
-        <Queue setQueueIsOpened={setQueueIsOpened} />
-      </>
-    );
+        <ReactPlayer
+          onStart={() => playerRef.current?.seekTo(0)}
+          ref={playerRef}
+          controls
+          onEnded={() => playerData && playNextTrackInQueue({ playerData, setPlayerData })}
+          className="hidden"
+          onPlay={() => playerData && !playerData.playing && setPlayerData({ ...playerData, playing: true })}
+          onPause={() => playerData && playerData.playing && setPlayerData({ ...playerData, playing: false })}
+          volume={0.5}
+          url={playerData?.url}
+          playing={playerData?.playing}
+        />
+      </section>
+
+      {queueIsOpened && <Queue setQueueIsOpened={setQueueIsOpened} />}
+    </>
+  );
 }

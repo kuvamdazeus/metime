@@ -150,7 +150,6 @@ export default function Dashboard() {
         <p className="text-2xl font-bold mb-3">Your Most Loved Albums</p>
         <section className="flex items-center overflow-x-scroll overflow-y-hidden">
           {userTopAlbums.map((album) => {
-            console.log(album);
             return <AlbumPoster album={album as IAlbumPoster} />;
           })}
         </section>
@@ -166,7 +165,9 @@ export default function Dashboard() {
         <section className="h-[450px] overflow-y-scroll">
           {dashboardData &&
             dashboardData.fetched_tracks &&
-            dashboardData.fetched_tracks.map((recom) => <Song song={recom} group={dashboardData.fetched_tracks} />)}
+            dashboardData.fetched_tracks.map((recom) => (
+              <Song song={recom} group={dashboardData.fetched_tracks} />
+            ))}
         </section>
       </section>
     </section>

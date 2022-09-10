@@ -1,5 +1,4 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { RiHeartAddLine } from "react-icons/ri";
 import { BiAddToQueue } from "react-icons/bi";
 import { IRecommendedTrack } from "../types/track";
@@ -55,11 +54,18 @@ export default function Song({ song, group }: Props) {
           onClick={() => {
             if (!playerData) return null;
 
-            if (playerData.queue.filter((queueSong) => queueSong.id === song.id).length !== 0)
+            if (
+              [...playerData.queue, playerData.current_song, ...playerData.previous_tracks].filter(
+                (queueSong) => queueSong.id === song.id
+              ).length !== 0
+            )
               return toggleToast({ message: "Song already in queue", type: "error" });
+
+            const newPrevTracks = playerData.previous_tracks.filter((prevTrack) => prevTrack.id !== song.id);
 
             setPlayerData({
               ...playerData,
+              previous_tracks: newPrevTracks,
               queue: [song, ...playerData?.queue],
             });
             toggleToast({ message: "Song added to queue", type: "message" });

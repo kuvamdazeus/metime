@@ -12,9 +12,9 @@ export default function Queue({ setQueueIsOpened }: Props) {
   const [playerData, setPlayerData] = useRecoilState(playerAtom);
 
   return (
-    <section className="fixed bottom-0 right-0 w-1/2 h-screen overflow-y-scroll bg-[#272727d6] text-white z-10">
-      <section className="">
-        <section className="flex justify-end items-center">
+    <section className="fixed z-50 flex justify-end bottom-0 right-0 h-screen w-screen backdrop-blur-sm overflow-y-scroll overscroll-contain">
+      <section className="w-1/2 text-white">
+        <section className="flex justify-end items-center bg-[#272727d6]">
           <MdClose
             onClick={() => setQueueIsOpened(false)}
             className="text-3xl m-3 cursor-pointer transform hover:scale-110"

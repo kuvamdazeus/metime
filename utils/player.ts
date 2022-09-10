@@ -25,7 +25,9 @@ export const playTrack = async (
 
   console.log("\nSEARCHING YOUTUBE");
   const getSongUrl = axios.get(
-    `/api/get_song_url?name=${song.name} ${song.explicit ? "explicit" : ""} by ${song.artists.join(" ")}`
+    `/api/get_song_url?name=audio track for ${song.name} ${
+      song.explicit ? "explicit" : ""
+    } by ${song.artists.join(" ")}`
   );
   const getAudioFeatures = song.type === "track" ? spotify.getAudioFeaturesForTrack(song.id) : { energy: 0 };
   const [res, audioFeatures] = await Promise.all([getSongUrl, getAudioFeatures]);
@@ -56,7 +58,11 @@ export const playNextTrackInQueue = async ({ playerData, setPlayerData }: PlayNe
 
   console.log("\nSEARCHING YOUTUBE", next_track);
 
-  const getSongUrl = axios.get(`/api/get_song_url?name=${next_track.name} by ${next_track.artists.join(" ")}`);
+  const getSongUrl = axios.get(
+    `/api/get_song_url?name=audio track for ${next_track.name} ${
+      next_track.explicit ? "explicit" : ""
+    } by ${next_track.artists.join(" ")}`
+  );
   const getAudioFeatures =
     next_track.type === "track" ? spotify.getAudioFeaturesForTrack(next_track.id) : { energy: 0 };
 
@@ -85,7 +91,11 @@ export const playPreviousTrackInQueue = async ({ playerData, setPlayerData }: Pl
   const previous_track = playerData.previous_tracks.at(-1) as IRecommendedTrack;
 
   console.log("\nSEARCHING YOUTUBE");
-  const getSongUrl = axios.get(`/api/get_song_url?name=${previous_track.name} by ${previous_track.artists.join(" ")}`);
+  const getSongUrl = axios.get(
+    `/api/get_song_url?name=audio track for ${previous_track.name} ${
+      previous_track.explicit ? "explicit" : ""
+    } by ${previous_track.artists.join(" ")}`
+  );
   const getAudioFeatures =
     previous_track.type === "track" ? spotify.getAudioFeaturesForTrack(previous_track.id) : { energy: 0 };
   const [res, audioFeatures] = await Promise.all([getSongUrl, getAudioFeatures]);
