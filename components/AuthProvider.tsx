@@ -15,12 +15,6 @@ export default function AuthProvider({ children }: { children: JSX.Element }) {
   const [user, setUser] = useRecoilState(userAtom);
 
   useEffect(() => {
-    // Wake up the recommendations server
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ML_SERVER}`)
-      .then()
-      .catch(() => console.warn("ML SERVER NOT RESPONDING"));
-
     const user_id = localStorage.getItem("user_id");
     if (user_id)
       autoLogin()
