@@ -1,22 +1,45 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-js";
+import playerAtom from "../../state/player";
 import userAtom from "../../state/user";
 import { IAlbumPoster, IPlaylistPoster } from "../../types/songs";
+import { IRecommendedTrack } from "../../types/track";
 import { IUser } from "../../types/user";
+import { playTrack } from "../player";
 
 const spotify = new SpotifyWebApi();
 
 export default function useDashboardData() {
   const user = useRecoilValue(userAtom) as IUser;
+  const setPlayerData = useSetRecoilState(playerAtom);
 
   const getDashboardItems = async () => {
+    spotify.getMyCurrentPlaybackState().then((playbackData) => {
+      const currentlyPlaying: IRecommendedTrack | null =
+        playbackData.item?.type === "track"
+          ? {
+              name: playbackData.item.name,
+              image_url: playbackData.item.album.images.at(0)?.url as string,
+              artists: playbackData.item.artists.map((artistData) => artistData.name),
+              explicit: playbackData.item.explicit,
+              type: "track",
+              duration: "0%",
+              id: "",
+            }
+          : null;
+
+      if (currentlyPlaying) playTrack(currentlyPlaying, [], { user, setPlayerData }, false);
+    });
+
     try {
-      if (parseInt(localStorage.getItem("dashboardItems_valid_till") as string) < Date.now()) throw new Error();
-      const { currentlyPlaying, topAlbums, topArtists, playlists } = JSON.parse(
+      if (parseInt(localStorage.getItem("dashboardItems_valid_till") as string) < Date.now())
+        throw new Error();
+      const { topAlbums, topArtists, playlists } = JSON.parse(
         localStorage.getItem("dashboardItems") as string
       );
 
-      return { currentlyPlaying, topAlbums, topArtists, playlists };
+      console.log("RETURNING CACHED RESOURCES");
+      return { topAlbums, topArtists, playlists };
     } catch (err) {
       localStorage.removeItem("dashboardItems");
       localStorage.removeItem("dashboardItems_valid_till");
@@ -26,13 +49,11 @@ export default function useDashboardData() {
 
     const getTopArtists = spotify.getMyTopArtists({ limit: 15 });
     const getTopTracks = spotify.getMyTopTracks({ limit: 15 });
-    const getCurrentPlaybackState = spotify.getMyCurrentPlaybackState();
     const getUserPlaylists = spotify.getUserPlaylists(user.user_id, { limit: 50 });
 
-    const [topArtistsData, topTracksData, playbackData, playlistsData] = await Promise.all([
+    const [topArtistsData, topTracksData, playlistsData] = await Promise.all([
       getTopArtists,
       getTopTracks,
-      getCurrentPlaybackState,
       getUserPlaylists,
     ]);
 
@@ -54,15 +75,6 @@ export default function useDashboardData() {
       };
     });
 
-    let currentlyPlaying =
-      playbackData.item?.type === "track"
-        ? {
-            name: playbackData.item.name,
-            image: playbackData.item.album.images.at(0),
-            artists: playbackData.item.artists.map((artistData) => artistData.name),
-          }
-        : null;
-
     const playlists: IPlaylistPoster[] = playlistsData.items.map((item) => {
       return {
         id: item.id,
@@ -76,7 +88,7 @@ export default function useDashboardData() {
       };
     });
 
-    const dashboardItems = { currentlyPlaying, topAlbums, topArtists, playlists };
+    const dashboardItems = { topAlbums, topArtists, playlists };
     localStorage.setItem("dashboardItems", JSON.stringify(dashboardItems));
     localStorage.setItem("dashboardItems_valid_till", String(Date.now() + 3 * 60 * 60 * 1000));
     return dashboardItems;

@@ -15,7 +15,8 @@ interface PlayTrack {
 export const playTrack = async (
   song: IRecommendedTrack,
   group: IRecommendedTrack[] = [],
-  { user, setPlayerData }: PlayTrack
+  { user, setPlayerData }: PlayTrack,
+  playing = true
 ) => {
   if (!user) {
     console.log("No auth, cant play tracks");
@@ -34,7 +35,7 @@ export const playTrack = async (
   console.log("\nGOT URL:", res.data.url);
 
   setPlayerData({
-    playing: true,
+    playing,
     previous_tracks: group.slice(
       0,
       group.findIndex((track) => track.id === song.id)

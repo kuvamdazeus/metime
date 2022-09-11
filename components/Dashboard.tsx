@@ -108,7 +108,7 @@ export default function Dashboard() {
       </section>
 
       {/* Top artists */}
-      <section className="p-5">
+      <section className="py-10 px-5">
         <p className="text-2xl font-bold mb-3">Your Most Loved Artists</p>
         <section className="flex items-center overflow-x-scroll">
           {userTopArtists.map((artist) => (
@@ -146,7 +146,7 @@ export default function Dashboard() {
       {/* Continue listening */}
 
       {/* Top albums */}
-      <section className="p-5">
+      <section className="py-10 px-5">
         <p className="text-2xl font-bold mb-3">Your Most Loved Albums</p>
         <section className="flex items-center overflow-x-scroll overflow-y-hidden">
           {userTopAlbums.map((album) => {
