@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import SpotifyWebApi from "spotify-web-api-js";
 import playerAtom from "../../state/player";
 import userAtom from "../../state/user";
@@ -11,7 +11,7 @@ const spotify = new SpotifyWebApi();
 
 export default function useDashboardData() {
   const user = useRecoilValue(userAtom) as IUser;
-  const setPlayerData = useSetRecoilState(playerAtom);
+  const [playerData, setPlayerData] = useRecoilState(playerAtom);
 
   const getDashboardItems = async () => {
     spotify.getMyCurrentPlaybackState().then((playbackData) => {
@@ -28,7 +28,7 @@ export default function useDashboardData() {
             }
           : null;
 
-      if (currentlyPlaying) playTrack(currentlyPlaying, [], { user, setPlayerData }, false);
+      if (currentlyPlaying && !playerData) playTrack(currentlyPlaying, [], { user, setPlayerData }, false);
     });
 
     try {
