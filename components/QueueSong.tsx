@@ -64,7 +64,7 @@ export default function QueueSong({ song }: Props) {
         return queueSong;
       });
 
-      setPlayerData({ ...playerData, queue: newQueue });
+      setPlayerData({ ...playerData, queue: newQueue } as any);
     }
 
     if (songIndex < currentSongIndex) {
@@ -83,7 +83,7 @@ export default function QueueSong({ song }: Props) {
         return prevTrack;
       });
 
-      setPlayerData({ ...playerData, previous_tracks: newPrevTracks });
+      setPlayerData({ ...playerData, previous_tracks: newPrevTracks } as any);
     }
   };
 
@@ -115,7 +115,7 @@ export default function QueueSong({ song }: Props) {
         return queueSong;
       });
 
-      setPlayerData({ ...playerData, queue: newQueue });
+      setPlayerData({ ...playerData, queue: newQueue } as any);
     }
 
     if (songIndex < currentSongIndex) {
@@ -134,7 +134,7 @@ export default function QueueSong({ song }: Props) {
         return prevTrack;
       });
 
-      setPlayerData({ ...playerData, previous_tracks: newPrevTracks });
+      setPlayerData({ ...playerData, previous_tracks: newPrevTracks } as any);
     }
   };
 
@@ -153,7 +153,7 @@ export default function QueueSong({ song }: Props) {
         queue?.filter((queueSong) => queueSong.id !== song.id) as IRecommendedTrack[]
       );
 
-      setPlayerData({ ...playerData, queue: newQueue });
+      setPlayerData({ ...playerData, queue: newQueue } as any);
     }
 
     if (songIndex < currentSongIndex) {
@@ -162,7 +162,7 @@ export default function QueueSong({ song }: Props) {
         prevTracks?.filter((prevTrack) => prevTrack.id !== song.id) as IRecommendedTrack[]
       );
 
-      setPlayerData({ ...playerData, previous_tracks: newPrevTracks });
+      setPlayerData({ ...playerData, previous_tracks: newPrevTracks } as any);
     }
   };
 
@@ -181,7 +181,7 @@ export default function QueueSong({ song }: Props) {
         [song]
       );
 
-      setPlayerData({ ...playerData, queue: newQueue });
+      setPlayerData({ ...playerData, queue: newQueue } as any);
     }
 
     if (songIndex < currentSongIndex) {
@@ -190,7 +190,7 @@ export default function QueueSong({ song }: Props) {
         prevTracks?.filter((prevTrack) => prevTrack.id !== song.id) as IRecommendedTrack[]
       ).concat([song]);
 
-      setPlayerData({ ...playerData, previous_tracks: newPrevTracks });
+      setPlayerData({ ...playerData, previous_tracks: newPrevTracks } as any);
     }
   };
 
@@ -199,7 +199,7 @@ export default function QueueSong({ song }: Props) {
       const queue = playerData?.queue;
       const newQueue = queue?.filter((queueSong) => queueSong.id !== song.id) as IRecommendedTrack[];
 
-      setPlayerData({ ...playerData, queue: newQueue });
+      setPlayerData({ ...playerData, queue: newQueue } as any);
     }
 
     if (songIndex < currentSongIndex) {
@@ -208,7 +208,7 @@ export default function QueueSong({ song }: Props) {
         (prevTrack) => prevTrack.id !== song.id
       ) as IRecommendedTrack[];
 
-      setPlayerData({ ...playerData, previous_tracks: newPrevTracks });
+      setPlayerData({ ...playerData, previous_tracks: newPrevTracks } as any);
     }
   };
 
